@@ -178,6 +178,7 @@ class Robot:
         return points
 
     def local_map(self, robot_location, map_glo, map_size, local_size):
+        # robot_location = np.int32(robot_location)
         minX = robot_location[0] - local_size
         maxX = robot_location[0] + local_size
         minY = robot_location[1] - local_size
