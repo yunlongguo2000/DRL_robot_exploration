@@ -7,7 +7,7 @@ import random
 import numpy as np
 import matplotlib.pyplot as plt
 from collections import deque
-from tf_networks import CNNNetwork
+from torch_networks import CNNNetwork
 from tensorboardX import SummaryWriter
 import robot_simulation as robot
 
@@ -57,6 +57,17 @@ def start():
     # Tensorboard
     if TRAIN:
         writer = SummaryWriter(log_dir=log_dir)
+
+    # Saving and loading networks
+    if TRAIN:
+        pass  # No need to load the network when training from scratch
+    else:
+        try:
+            checkpoint = torch.load(os.path.join(network_dir, 'cnn_2000000.pth'))
+            policy_net.load_state_dict(checkpoint)
+            print("Successfully loaded the network weights")
+        except FileNotFoundError:
+            print("Could not find old network weights, starting from scratch")
 
     # Get the first state by doing nothing and preprocess the image to 80x80x1
     x_t = robot_explo.begin()

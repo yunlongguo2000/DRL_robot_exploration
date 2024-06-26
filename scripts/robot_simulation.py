@@ -178,7 +178,7 @@ class Robot:
         return points
 
     def local_map(self, robot_location, map_glo, map_size, local_size):
-        # robot_location = np.int32(robot_location)
+        robot_location = np.int32(robot_location)
         minX = robot_location[0] - local_size
         maxX = robot_location[0] + local_size
         minY = robot_location[1] - local_size
@@ -278,6 +278,7 @@ class Robot:
         return coll_points, coll_index
 
     def inverse_sensor(self, robot_position, sensor_range, op_map, map_glo):
+        robot_position = np.int32(robot_position)
         op_map = inverse_sensor_model(robot_position[0], robot_position[1], sensor_range, op_map, map_glo)
         return op_map
 
@@ -335,11 +336,29 @@ class Robot:
         return path
 
     def plot_env(self):
+        plt.figure(1, figsize=(10, 5))  # Set the figure size and number
+
+        # Subplot 1 for the overall map and robot's path
+        plt.subplot(1, 2, 1)  # 1 row, 2 columns, subplot 1
         plt.cla()
         plt.imshow(self.op_map, cmap='gray')
         plt.axis((0, self.map_size[1], self.map_size[0], 0))
+
+        # Plot the robot's path
         plt.plot(self.xPoint, self.yPoint, 'b', linewidth=2)
+
+        # Plot the path to the frontier
         plt.plot(self.x2frontier, self.y2frontier, 'r', linewidth=2)
+
+        # Plot the robot's current position
         plt.plot(self.robot_position[0], self.robot_position[1], 'mo', markersize=8)
+
+        # Plot the robot's starting position
         plt.plot(self.xPoint[0], self.yPoint[0], 'co', markersize=8)
+
+        # Subplot 2 for the robot's local observation
+        plt.subplot(1, 2, 2)  # 1 row, 2 columns, subplot 2
+        local_map = self.local_map(self.robot_position, self.op_map, self.map_size, self.sensor_range + self.local_size)
+        plt.imshow(local_map, cmap='gray', alpha=1)
+
         plt.pause(0.05)

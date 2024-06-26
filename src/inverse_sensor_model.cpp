@@ -57,7 +57,7 @@ Eigen::MatrixXd inverse_sensor_model(int x0, int y0, int sensor_range,
     double y1 = double (y0) + double(sensor_range) * sin(angle);
     line(x0, y0, x1, y1, global_map, op_map_mod);
   }
-  return op_map_mod;
+  return op_map_mod;ap
 }
 
 PYBIND11_PLUGIN(inverse_sensor_model) {
